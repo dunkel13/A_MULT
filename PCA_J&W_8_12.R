@@ -27,6 +27,8 @@ R <- cor(airP)
 # valores y vectores propios de R
 vpr <- eigen(R)
 v1r <- vpr$vectors; v1r
+# proporción de la varianza explicada por la componente 1
+vpr$values[1]/7
 
 # Comparación con lo obtenido usando princomp
 PC <- princomp(airP, cor=1)
