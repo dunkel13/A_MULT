@@ -36,3 +36,16 @@
   lc[2]<-a%*%xbar+ qt(1-alpha/(2*7),60)*sqrt(t(a)%*%S%*%a/n)
   round(lc,2)
 }
+{ # Punto B: Elipse del 95% de confianza muestra grande
+  S.b<-matrix(c(S[1,1],S[1,4],S[4,1],S[4,4]), nr=2, nc=2, byrow=T)
+  R<- matrix(c(1,S.b[1,2]/sqrt(S.b[1,1]*S.b[2,2]),S.b[1,2]/sqrt(S.b[1,1]*S.b[2,2]),1), nr=2, nc=2, byrow = T)
+  library(ellipse)
+  plot(ellipse(x=R, scale=c(1,1), centre=c(xbar[1],xbar[4]), t=qchisq(0.95,2)), type='l', xlim=c(70.5,116), ylim=c(85,105) )          
+  points(xbar[1],xbar[4])
+  lines(seq(from=75, to=117, length.out=1000),rep(liB[4],1000), lty=2)
+  lines(seq(from=75, to=117, length.out=1000),rep(lsB[4],1000), lty=2)
+  lines(rep(liB[1],1000),seq(from=80, to=105, length.out=1000), lty=2)
+  lines(rep(lsB[1],1000),seq(from=80, to=105, length.out=1000), lty=2)
+  rbind(liB[c(1,4)],lsB[c(1,4)])
+  rbind(li[c(1,4)],ls[c(1,4)])     
+}
