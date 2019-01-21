@@ -29,3 +29,10 @@
   }
   round(rbind(liB,lsB),2)
 }
+{ # Punto E: IC Bonferroni para una combinación lineal
+  a<-c(0,0,0,0,-1,1)
+  lc<-NA
+  lc[1]<-a%*%xbar- qt(1-alpha/(2*7),60)*sqrt(t(a)%*%S%*%a/n)
+  lc[2]<-a%*%xbar+ qt(1-alpha/(2*7),60)*sqrt(t(a)%*%S%*%a/n)
+  round(lc,2)
+}
