@@ -38,14 +38,31 @@
 }
 { # Punto B: Elipse del 95% de confianza muestra grande
   S.b<-matrix(c(S[1,1],S[1,4],S[4,1],S[4,4]), nr=2, nc=2, byrow=T)
-  R<- matrix(c(1,S.b[1,2]/sqrt(S.b[1,1]*S.b[2,2]),S.b[1,2]/sqrt(S.b[1,1]*S.b[2,2]),1), nr=2, nc=2, byrow = T)
-  library(ellipse)
-  plot(ellipse(x=R, scale=c(1,1), centre=c(xbar[1],xbar[4]), t=qchisq(0.95,2)), type='l', xlim=c(70.5,116), ylim=c(85,105) )          
-  points(xbar[1],xbar[4])
+  solve(S.b)
+  VP<- eigen(S.b)
+  e1<-VP$vectors[,1]
+  e2<-VP$vectors[,2]
+  lambda1<-VP$values[1]
+  lambda2<-VP$values[2]
+  e.ma<-c(xbar[1],xbar[4])-sqrt(lambda1)*sqrt(qchisq(0.95,2)/n)*e1
+  e.me<-c(xbar[1],xbar[4])-sqrt(lambda2)*sqrt(qchisq(0.95,2)/n)*e2
+  e.ma1<-c(xbar[1],xbar[4])+sqrt(lambda1)*sqrt(qchisq(0.95,2)/n)*e1
+  e.me1<-c(xbar[1],xbar[4])+sqrt(lambda2)*sqrt(qchisq(0.95,2)/n)*e2
+  plot(xbar[1],xbar[4], xlim=c(70,120), ylim=c(85,105))
+  points(c(e.ma[1],e.me[1],e.ma1[1],e.me1[1]),c(e.ma[2],e.me[2],e.ma1[2],e.me1[2]))
+  lines(c(e.me[1],e.me1[1]),c(e.me[2],e.me1[2]), lty =1)
+  lines(c(e.ma[1],e.ma1[1]),c(e.ma[2],e.ma1[2]), lty =1)
+  
+  mu1<-c(e.ma[1],e.me[1],e.ma1[1],e.me1[1])
+  mu4<-c(e.ma[2],e.me[2],e.ma1[2],e.me1[2])
+  rbind(mu1, mu4)
+  n*t(c(95.52-mu1[4],93.39-mu4[4]))%*%solve(S.b)%*%c(95.52-mu1[4],93.39-mu4[4])
+  
   lines(seq(from=75, to=117, length.out=1000),rep(liB[4],1000), lty=2)
   lines(seq(from=75, to=117, length.out=1000),rep(lsB[4],1000), lty=2)
   lines(rep(liB[1],1000),seq(from=80, to=105, length.out=1000), lty=2)
   lines(rep(lsB[1],1000),seq(from=80, to=105, length.out=1000), lty=2)
+  
   rbind(liB[c(1,4)],lsB[c(1,4)])
   rbind(li[c(1,4)],ls[c(1,4)])     
 }
